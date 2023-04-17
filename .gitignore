@@ -1,0 +1,4 @@
+node_modules/
+deployment/.terraform/
+deployment/terraform.tfstate*
+deployment/terraform.tfvars

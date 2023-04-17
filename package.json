@@ -1,0 +1,19 @@
+{
+  "name": "media-scheduler",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1"
+  }
+}
