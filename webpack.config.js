@@ -1,5 +1,4 @@
 const path = require('path');
-const ZipPlugin = require('zip-webpack-plugin');
 
 const handlers = ['get-media', 'search-media'];
 
@@ -30,11 +29,4 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'commonjs',
   },
-  plugins: handlers.map(
-    (handler) =>
-      new ZipPlugin({
-        filename: `${handler}.zip`,
-        include: [`${handler}.js`],
-      })
-  ),
 };

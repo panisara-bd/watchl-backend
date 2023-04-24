@@ -1,1 +1,1 @@
-export const handler = (): string => 'Search jepw';
+export const handler = async (): Promise<string> => 'Search jepw';
