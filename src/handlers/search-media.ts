@@ -1,0 +1,1 @@
+export const handler = (): string => 'Search jepw';
