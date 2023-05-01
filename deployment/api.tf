@@ -29,3 +29,7 @@ resource "aws_api_gateway_stage" "live" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   stage_name    = "live"
 }
+
+output "api_url" {
+  value = aws_api_gateway_stage.live.invoke_url
+}
