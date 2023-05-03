@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 locals {
-  functions = toset(["get-media", "search-media"])
+  functions = toset(["get-media", "search-media", "schedule-media"])
 }
 
 data "archive_file" "lambda_archives" {
@@ -36,6 +36,12 @@ resource "aws_lambda_function" "lambdas" {
       RAPIDAPI_API_KEY = var.rapidapi_api_key
     }
   }
+}
+
+resource "aws_cloudwatch_log_group" "lambdas" {
+  for_each          = local.functions
+  name              = "/aws/lambda/watchl-${each.key}"
+  retention_in_days = 7
 }
 
 resource "aws_lambda_permission" "api" {

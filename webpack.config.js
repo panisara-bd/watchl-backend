@@ -1,6 +1,6 @@
 const path = require('path');
 
-const handlers = ['get-media', 'search-media'];
+const handlers = ['get-media', 'search-media', 'schedule-media'];
 
 module.exports = {
   entry: handlers.reduce(

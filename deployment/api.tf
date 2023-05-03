@@ -1,7 +1,8 @@
 resource "aws_api_gateway_rest_api" "api" {
   body = jsonencode(yamldecode(templatefile("${path.module}/../openapi.yaml.tpl", {
     get_media_lambda_arn : aws_lambda_function.lambdas["get-media"].invoke_arn,
-    search_media_lambda_arn : aws_lambda_function.lambdas["search-media"].invoke_arn
+    search_media_lambda_arn : aws_lambda_function.lambdas["search-media"].invoke_arn,
+    schedule_media_lambda_arn : aws_lambda_function.lambdas["schedule-media"].invoke_arn,
   })))
 
   name = "watchl-api"

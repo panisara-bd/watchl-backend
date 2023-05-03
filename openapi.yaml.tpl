@@ -6,6 +6,7 @@ paths:
   /media/{mediaId}:
     get:
       summary: Get Media
+      x-amazon-apigateway-request-validator: params-only
       parameters:
         - name: mediaId
           in: path
@@ -29,6 +30,7 @@ paths:
   /media/search:
     get:
       summary: Search media
+      x-amazon-apigateway-request-validator: params-only
       parameters:
         - name: query
           in: query
@@ -54,36 +56,19 @@ paths:
   /schedule:
     post:
       summary: Add media to schedule
+      required: true
+      x-amazon-apigateway-request-validator: all
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                mediaId:
-                  type: string
-                time:
-                  type: string
-                location:
-                  type: string
-                details:
-                  type: string
-                invites:
-                  type: array
-                  items:
-                    type: string
+              $ref: '#/components/schemas/MediaScheduleObject'
       responses:
-        '200':
-          description: A list of matching media objects
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MediaSearchObject'
+        '201':
+          description: A media schedule is created
       x-amazon-apigateway-integration:
-        uri: '${search_media_lambda_arn}'
+        uri: '${schedule_media_lambda_arn}'
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -140,3 +125,28 @@ components:
           type: string
         year:
           type: integer
+    MediaScheduleObject:
+      type: object
+      required:
+        - mediaId
+        - time
+      properties:
+        mediaId:
+          type: string
+        time:
+         type: string
+        location:
+          type: string
+        details:
+          type: string
+        invites:
+          type: array
+          items:
+            type: string
+x-amazon-apigateway-request-validators:
+  all:
+    validateRequestBody: true
+    validateRequestParameters: true
+  params-only:
+    validateRequestBody: false
+    validateRequestParameters: true

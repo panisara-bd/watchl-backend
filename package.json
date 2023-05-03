@@ -16,6 +16,10 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "@types/aws-lambda": "^8.10.114"
+    "@aws-sdk/client-dynamodb": "^3.321.1",
+    "@aws-sdk/lib-dynamodb": "^3.321.1",
+    "@types/aws-lambda": "^8.10.114",
+    "aws-crt": "^1.15.15",
+    "aws-jwt-verify": "^4.0.0"
   }
 }
