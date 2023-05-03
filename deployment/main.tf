@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 locals {
-  functions = toset(["get-media", "search-media", "schedule-media"])
+  functions = toset(["get-media", "search-media", "schedule-media", "delete-media", "get-schedule", "get-scheduled-media"])
 }
 
 data "archive_file" "lambda_archives" {

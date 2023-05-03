@@ -56,8 +56,7 @@ paths:
   /schedule:
     post:
       summary: Add media to schedule
-      required: true
-      x-amazon-apigateway-request-validator: all
+      x-amazon-apigateway-request-validator: body-only
       requestBody:
         required: true
         content:
@@ -69,6 +68,61 @@ paths:
           description: A media schedule is created
       x-amazon-apigateway-integration:
         uri: '${schedule_media_lambda_arn}'
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    get:
+      summary: Get the schedule
+      responses:
+        '204':
+          description: Get schedule from database successful
+        '401':
+          description: Unauthorized
+      x-amazon-apigateway-integration:
+        uri: '${get_schedule_lambda_arn}'
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+  /schedule/{time}:
+    delete:
+      summary: Delete media from the schedule
+      x-amazon-apigateway-request-validator: params-only
+      parameters:
+        - name: time
+          in: path
+          required: true
+          description: The time
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        '204':
+          description: Deleted
+        '401':
+          description: Unauthorized
+      x-amazon-apigateway-integration:
+        uri: '${delete_media_lambda_arn}'
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    get:
+      summary: Get the media from schedule
+      x-amazon-apigateway-request-validator: params-only
+      parameters:
+        - name: time
+          in: path
+          required: true
+          description: Get medie by time
+          schema:
+            type: string
+            minimum: 1
+      responses:
+        '204':
+          description: Get schedule from database successful
+        '401':
+          description: Unauthorized
+      x-amazon-apigateway-integration:
+        uri: '${get_scheduled_media_lambda_arn}'
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -150,3 +204,6 @@ x-amazon-apigateway-request-validators:
   params-only:
     validateRequestBody: false
     validateRequestParameters: true
+  body-only:
+    validateRequestBody: true
+    validateRequestParameters: false
