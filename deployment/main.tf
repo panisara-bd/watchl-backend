@@ -33,7 +33,9 @@ resource "aws_lambda_function" "lambdas" {
 
   environment {
     variables = {
-      RAPIDAPI_API_KEY = var.rapidapi_api_key
+      RAPIDAPI_API_KEY     = var.rapidapi_api_key
+      COGNITO_USER_POOL_ID = var.cognito_user_pool_id
+      COGNITO_CLIENT_ID    = var.cognito_client_id
     }
   }
 }

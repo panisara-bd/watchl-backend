@@ -9,13 +9,32 @@ import {
 
 const client = new DynamoDBClient({});
 
-const dynamo = DynamoDBDocumentClient.from(client);
+const dynamo = DynamoDBDocumentClient.from(client, { marshallOptions: { removeUndefinedValues: true }});
 
 const tableName = 'watchl-schedule';
+
+type Media = {
+  id: string,
+  image: {
+    height: number,
+    url: string,
+    width: number,
+  },
+  runningTimeInMinutes: number,
+  nextEpisode?: string,
+  numberOfEpisodes?: string,
+  title: string,
+  titleType: string,
+  year: string,
+  rating: string,
+  genres: string,
+  summary: string,
+}
 
 type ScheduleMedia = {
   userId: string;
   mediaId: string;
+  media: Media;
   time: string;
   location?: string;
   details?: string;

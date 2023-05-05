@@ -6,30 +6,34 @@ import { fetchMediaById } from '../clients/media-client';
 export const handler: APIGatewayProxyHandler = async (event) => {
   const authorizationHeader = event.headers.authorization || event.headers.Authorization;
   if (!authorizationHeader) {
-    return {
-        statusCode: 401,
-        body: JSON.stringify(null),
-      };
-  }
-
-  const token = authorizationHeader.replace('Bearer ', '');
-  const user = await verifyToken(token);
-  if (!user) {
+    console.warn('No authorization header')
     return {
       statusCode: 401,
       body: JSON.stringify(null),
     };
   }
-
-  const media = await fetchMediaById(JSON.parse(event.body).mediaId);
+  
+  const token = authorizationHeader.replace('Bearer ', '');
+  const user = await verifyToken(token);
+  if (!user) {
+    console.warn('Invalid user')
+    return {
+      statusCode: 401,
+      body: JSON.stringify(null),
+    };
+  }
+  
+  const requestBody = JSON.parse(event.body)
+  const media = await fetchMediaById(requestBody.mediaId);
   if (!media) {
+    console.warn(`No media for ${requestBody.mediaId}`);
     return {
       statusCode: 404,
       body: JSON.stringify(null),
     };
   }
-
-  await saveSchedule({ ...JSON.parse(event.body), media, userId: user.sub });
+  
+  await saveSchedule({ ...requestBody, media, userId: user.sub });
   return {
     statusCode: 201,
     body: JSON.stringify(null),
