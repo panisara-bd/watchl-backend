@@ -5,9 +5,7 @@ import { verifyToken } from '../clients/cognito-verify-client';
 export const handler: APIGatewayProxyHandler = async (event) => {
   const authorizationHeader =
     event.headers.authorization || event.headers.Authorization;
-  if (!authorizationHeader) {  
-    console.warn('hello jewp');
-    
+  if (!authorizationHeader) {     
     return {
       statusCode: 401,
       body: JSON.stringify(null),
@@ -17,7 +15,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   const token = authorizationHeader.replace('Bearer ', '');
   const user = await verifyToken(token);
   if (!user) {
-    console.warn('bye jewp');
     return {
       statusCode: 401,
       body: JSON.stringify(null),

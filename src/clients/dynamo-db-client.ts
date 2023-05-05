@@ -15,8 +15,8 @@ const tableName = 'watchl-schedule';
 
 type ScheduleMedia = {
   userId: string;
-  time: string;
   mediaId: string;
+  time: string;
   location?: string;
   details?: string;
   invites?: string[];

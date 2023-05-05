@@ -59,16 +59,34 @@ type MediaResult = {
 
 export const fetchMediaById = async (
   id: string
-): Promise<MediaResult | null> => {
+) => {
   const options = {
     method: 'GET',
     headers,
   };
   const url = `https://imdb8.p.rapidapi.com/title/get-overview-details?tconst=${id}`;
   const response = await fetch(url, options);
-
+ 
   if (response.ok) {
-    return response.json();
+   const clientResult: MediaResult = await response.json();
+   const result = {
+    id: id,
+    image: {
+      height: clientResult.title.image.height,
+      url: clientResult.title.image.url,
+      width: clientResult.title.image.width,
+    },
+    runningTimeInMinutes: clientResult.title.runningTimeInMinutes,
+    nextEpisode: clientResult.title.nextEpisode,
+    numberOfEpisodes: clientResult.title.numberOfEpisodes,
+    title: clientResult.title.title,
+    titleType: clientResult.title.titleType,
+    year: clientResult.title.year,
+    rating: clientResult.ratings.rating,
+    genres: clientResult.genres,
+    summary: clientResult.plotSummary.text,
+  };
+  return result;
   } else {
     return null;
   }
