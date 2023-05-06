@@ -41,45 +41,44 @@ type ScheduleMedia = {
   invites?: string[];
 };
 
-export const saveSchedule = async (scheduleMedia: ScheduleMedia) => {
+export const saveSchedule = async (scheduleMedia: ScheduleMedia) =>
   await dynamo.send(
     new PutCommand({
       TableName: tableName,
       Item: scheduleMedia,
     })
   );
-};
 
-export const deleteSchedule = async (key: { userId: string; time: string }) => {
+export const deleteSchedule = async (key: { userId: string; time: string }) =>
   await dynamo.send(
     new DeleteCommand({
       TableName: tableName,
       Key: key,
     })
   );
-};
 
-export const getSchedule = async (userId: string) => {
+
+export const getSchedule = async (userId: string) =>
   await dynamo.send(
     new QueryCommand({
       TableName: tableName,
       KeyConditionExpression: '#userId = :userId',
-      ExpressionAttributeNames: { userId: 'userId' },
+      ExpressionAttributeNames: { '#userId': 'userId' },
       ExpressionAttributeValues: {
-        userId,
+        ':userId': userId,
       },
     })
   );
-};
+
 
 export const getScheduledMedia = async (key: {
   userId: string;
   time: string;
-}) => {
+}) =>
   await dynamo.send(
     new GetCommand({
       TableName: tableName,
       Key: key,
     })
   );
-};
+

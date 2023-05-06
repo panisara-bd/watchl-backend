@@ -74,7 +74,7 @@ paths:
     get:
       summary: Get the schedule
       responses:
-        '204':
+        '200':
           description: Get schedule from database successful
         '401':
           description: Unauthorized
