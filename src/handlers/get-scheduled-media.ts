@@ -1,33 +1,20 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { getScheduledMedia } from '../clients/dynamo-db-client';
-import { verifyToken } from '../clients/cognito-verify-client';
+import { verifyAuth } from '../helpers/verify-auth';
+import { withErrorHandler } from '../helpers/error-handler';
 
-export const handler: APIGatewayProxyHandler = async (event) => {
-  const authorizationHeader =
-    event.headers.authorization || event.headers.Authorization;
-  if (!authorizationHeader) {
+export const handler: APIGatewayProxyHandler = withErrorHandler(
+  async (event) => {
+    const user = await verifyAuth(event);
+
+    await getScheduledMedia({
+      userId: user.sub,
+      time: event.pathParameters.time,
+    });
+
     return {
-      statusCode: 401,
+      statusCode: 204,
       body: JSON.stringify(null),
     };
   }
-
-  const token = authorizationHeader.replace('Bearer ', '');
-  const user = await verifyToken(token);
-  if (!user) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify(null),
-    };
-  }
-
-  await getScheduledMedia({
-    userId: user.sub,
-    time: event.pathParameters.time,
-  });
-
-  return {
-    statusCode: 204,
-    body: JSON.stringify(null),
-  };
-};
+);

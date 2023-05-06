@@ -6,11 +6,4 @@ const verifier = CognitoJwtVerifier.create({
   clientId: process.env.COGNITO_CLIENT_ID,
 });
 
-export const verifyToken = async (token: string) => {
-  try {
-    return await verifier.verify(token)
-  } catch (e) {
-    console.error(e);
-    return null
-  }
-};
+export const verifyToken = (token: string) => verifier.verify(token);
