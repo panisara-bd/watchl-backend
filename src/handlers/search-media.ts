@@ -7,20 +7,7 @@ export const handler: APIGatewayProxyHandler = withErrorHandler(
   async (event) => {
     await verifyAuth(event);
     const { query } = event.queryStringParameters;
-    const clientResults = await searchMedia(query);
-    const results = clientResults.d.map((clientResult) => ({
-      id: clientResult.id,
-      image: clientResult.i
-        ? {
-            height: clientResult.i.height,
-            url: clientResult.i.imageUrl,
-            width: clientResult.i.width,
-          }
-        : undefined,
-      title: clientResult.l,
-      titleType: clientResult.q,
-      year: clientResult.y,
-    }));
+    const results = await searchMedia(query);
 
     return {
       statusCode: 200,
