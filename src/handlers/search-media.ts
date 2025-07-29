@@ -22,12 +22,20 @@ export const handler: APIGatewayProxyHandler = withErrorHandler(
         body: JSON.stringify({ error: 'Query parameter cannot be empty' }),
       };
     }
-    
-    const results = await searchMedia(query);
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(results),
-    };
+    console.log(`Searching for media with query: "${query}"`);
+    
+    try {
+      const results = await searchMedia(query);
+      console.log(`Found ${results.length} results for query: "${query}"`);
+      
+      return {
+        statusCode: 200,
+        body: JSON.stringify(results),
+      };
+    } catch (error) {
+      console.error('Search media error:', error);
+      throw error;
+    }
   }
 );
