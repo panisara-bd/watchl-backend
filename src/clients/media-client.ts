@@ -18,6 +18,10 @@ type SearchResult = {
 };
 
 export const searchMedia = async (query: string) => {
+  if (!process.env.RAPIDAPI_API_KEY) {
+    throw new Error('RAPIDAPI_API_KEY environment variable is not set');
+  }
+
   const options = {
     method: 'GET',
     headers,
@@ -25,10 +29,16 @@ export const searchMedia = async (query: string) => {
   const url = `https://imdb8.p.rapidapi.com/title/v2/find?title=${encodeURI(
     query
   )}&titleType=movie,tvSeries`;
+  
   const response = await fetch(url, options);
 
   if (response.ok) {
     const clientResults: SearchResult = await response.json();
+    
+    if (!clientResults.results) {
+      return [];
+    }
+    
     const result = clientResults.results.map((clientResult) => ({
       id: clientResult.id.split('/').slice(-2, -1),
       image: clientResult.image
@@ -44,7 +54,9 @@ export const searchMedia = async (query: string) => {
     }));
     return result;
   } else {
-    return [];
+    const errorText = await response.text();
+    console.error('IMDB API error:', response.status, errorText);
+    throw new Error(`IMDB API error ${response.status}: ${errorText}`);
   }
 };
 

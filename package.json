@@ -9,6 +9,9 @@
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "devDependencies": {
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.4",
